@@ -10,13 +10,13 @@ const SearchPage = () => {
 
   const handleSearch = () =>{
     if(city=="")
-      toast.error('Enter city name',{duration:1000});
+      toast.error('Enter a city name',{duration:1000});
     else if(weather && city.toLowerCase() == lastFetchedCity.toLowerCase() )
       toast.error('Enter new city name',{duration:1200});
     else fetchWeatherData();
   }
   useEffect(()=>{
-    toast.loading('Fecthing...');
+    toast.loading('Fetching...');
   },[loading])
 
   useEffect(()=>{
@@ -33,7 +33,7 @@ const SearchPage = () => {
   },[error]);
 
   return (
-    <div className=' max-md:my-50 min-md:my-70 flex flex-cols w-1/2 max-lg:w-2/3 max-md:w-full justify-self-center'>
+    <div className=' my-70 flex flex-cols w-1/2 max-lg:w-2/3 max-md:w-full justify-self-center'>
       <input
         maxLength={30}
         name="cityName"

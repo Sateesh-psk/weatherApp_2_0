@@ -9,8 +9,8 @@ const AstroDetailCard = (props) => {
         <h3 className=' text-secondary2 text-center max-sm:text-sm'>RISE</h3>
       </div>
       {props.sun=='1' ? 
-        <SunMedium className=' w-40 h-40 max-sm:w-20 max-sm:h-20 stroke-1 text-red-400' /> :
-        <MoonIcon className=' w-40 h-40 max-sm:w-20 max-sm:h-20 stroke-1 text-blue-400' />
+        <SunMedium className=' w-40 h-40 max-sm:w-24 max-sm:h-24 stroke-1 text-red-400' /> :
+        <MoonIcon className=' w-40 h-40 max-sm:w-24 max-sm:h-24 stroke-1 text-blue-400' />
       }
       <div className=' my-auto animate-slide-up'>
         <h1 className=' min-sm:text-3xl max-sm:text-xl text-secondary3'>{props.set}</h1>

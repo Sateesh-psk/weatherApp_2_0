@@ -3,6 +3,7 @@ import "./index.css"
 import SearchPage from './pages/SearchPage'
 import WeatherPage from './pages/WeatherPage'
 import useWeatherStore from './store/weatherStore'
+import Footer from './components/Footer'
 
 const App = () => {
   const { weather, loading } = useWeatherStore();
@@ -12,6 +13,7 @@ const App = () => {
       {weather && !loading && (
         <WeatherPage />
       )}
+      <Footer />
     </div>
   )
 }

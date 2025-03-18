@@ -63,7 +63,7 @@ const HourlyForecast = () => {
     <div className="mx-0 px-0 my-80 py-10">
       {/* {console.log(forecastData)} */}
       <HourlyCardTab tabs={tabs} setActiveTab />
-      <div className=" select-none scrollbar-custom grid grid-flow-col overflow-x-scroll">
+      <div className=" rounded-lg select-none scrollbar-custom grid grid-flow-col overflow-x-scroll">
         {forecastData.hour.map((obj, index) => {
           const hourTime = timeSetter(obj.time.split(" ")[1]);
           const {temp_c,feelslike_c, humidity, precip_mm} = obj;
@@ -74,7 +74,7 @@ const HourlyForecast = () => {
             <div key={obj.time} className={` py-3 max-sm:px-2 min-sm:px-5 justify-items-center ${getGradient(obj.is_day, temp_c)}`}>
               <h2 className="text-secondary3 my-2 text-center">{hourTime}</h2>
               <div className=" min-sm:h-16 max-sm:h-12">
-                <img src={obj.condition.icon} className="scale-200 my-8" alt="Weather Icon" />
+                <img src={obj.condition.icon} className=" max-sm:scale-150 min-sm:scale-200 max-sm:my-4 min-sm:my-8" alt="Weather Icon" />
               </div>
               <HourCardChart data={data[curr]} mini={minis[curr]} maxi={maxis[curr]} units={units[curr]} />
             </div>
