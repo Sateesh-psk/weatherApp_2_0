@@ -2,7 +2,7 @@
 
 @layer utilities {
   .scrollbar-custom::-webkit-scrollbar {
-    width: 8px; /* Width of the vertical scrollbar */
+    width: 2px; /* Width of the vertical scrollbar */
     height: 4px; /* Height of the horizontal scrollbar */
     background-color: inherit;
   }
@@ -11,6 +11,7 @@
     background: #888; /* Scrollbar handle color */
     border-radius: 2px;
   }
+
 
   @keyframes fade-in {
     from {
@@ -76,7 +77,7 @@
   .animate-blur-clear {
     animation: blur-clear 1.5s ease-out;
     animation-timeline: view();
-    animation-range: entry 0% cover 50%;
+    animation-range: entry 0% cover 40%;
   }
 
   .animate-scale-up {

@@ -1,59 +1,99 @@
-import React, { useEffect } from 'react'
-import { SearchIcon } from 'lucide-react'
-import useWeatherStore from "../store/weatherStore"
-import { Toaster,toast } from 'react-hot-toast'
-
+import React, { useEffect, useRef, useState } from 'react'
+import { Toaster, toast } from 'react-hot-toast'
+import useWeatherStore from '../store/weatherStore'
+import SearchInput from '../components/SearchInput'
+import SuggestionsList from '../components/SuggestionsList'
+import useCitySuggestions from '../hooks/UseCitySuggestions'
 
 const SearchPage = () => {
-  const { city, weather, lastFetchedCity, loading, error, setCity, fetchWeatherData} = useWeatherStore();
-  var toastId;
+  const {
+    city,
+    setCity,
+    fetchWeatherData,
+    weather,
+    loading,
+    error,
+    lastFetchedCity
+  } = useWeatherStore();
 
-  const handleSearch = () =>{
-    if(city=="")
-      toast.error('Enter a city name',{duration:1000});
-    else if(weather && city.toLowerCase() == lastFetchedCity.toLowerCase() )
-      toast.error('Enter new city name',{duration:1200});
+  const inputRef = useRef(null); // Input focus ref
+  const suggestions = useCitySuggestions(city);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+
+  const handleSearch = () => {
+    if (city === '') toast.error('Enter a city name', { duration: 1000 });
+    else if (weather && city.toLowerCase() === lastFetchedCity.toLowerCase())
+      toast.error('Enter new city name', { duration: 1200 });
     else fetchWeatherData();
-  }
-  useEffect(()=>{
-    toast.loading('Fetching...');
-  },[loading])
+  };
 
-  useEffect(()=>{
-    if(weather){
-      toast.dismiss(toastId);
-      toast.success('Fetched Successfully',{duration:1500});
-      // console.log(weather);
+  useEffect(() => setFocusedIndex(-1), [suggestions]);
+
+  useEffect(() => {
+    if (loading) toast.loading('Fetching...');
+  }, [loading]);
+
+  useEffect(() => {
+    if (weather) {
+      toast.dismiss();
+      toast.success('scroll down for details', { duration: 1100 });
     }
-  },[weather])
+  }, [weather]);
 
-  useEffect(()=>{
-    toast.dismiss(toastId);
-    if(error) toast.error(error,{duration:1500});
-  },[error]);
+  useEffect(() => {
+    toast.dismiss();
+    if (error) toast.error(error, { duration: 1500 });
+  }, [error]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      if (focusedIndex >= 0 && suggestions.length > 0) {
+        const selected = suggestions[focusedIndex];
+        setCity(`${selected.name},${selected.country}`);
+        setFocusedIndex(-1);
+        inputRef.current?.focus(); // Focus input
+      } else {
+        handleSearch();
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (suggestions.length > 0)
+        setFocusedIndex((prev) => (prev + 1) % suggestions.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (suggestions.length > 0)
+        setFocusedIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
+    }
+  };
+
+  const handleSuggestionSelect = (item) => {
+    setCity(`${item.name},${item.country}`);
+    inputRef.current?.focus(); // Focus input after selecting
+  };
 
   return (
-    <div className=' my-70 flex flex-cols w-1/2 max-lg:w-2/3 max-md:w-full justify-self-center'>
-      <input
-        maxLength={30}
-        name="cityName"
-        value={city}
-        onChange={(e)=>setCity(e.target.value)}
-        placeholder='Enter city name here'
-        autoComplete='off'
-        
-        className=' pl-5 py-2 max-sm:tracking-normal tracking-wider rounded-l-md focus:outline-0 text-black bg-white w-full'
-      />
-      <button
-        className=' select-none bg-white pr-5 rounded-r-md hover:cursor-pointer'
-        onClick={()=>handleSearch()}
-      >
-        <SearchIcon className=' text-black' />
-      </button>
-
+    <div className="h-[75vh] flex">
+      <div className="flex flex-col w-full items-center justify-center">
+        <SearchInput
+          ref={inputRef}
+          city={city}
+          onChange={(e) => setCity(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onSearch={handleSearch}
+        />
+        <div className="select-none w-1/2 max-lg:w-2/3 max-md:w-full">
+          {suggestions.length > 0 && (
+            <SuggestionsList
+              suggestions={suggestions}
+              onSelect={handleSuggestionSelect}
+              focusedIndex={focusedIndex}
+            />
+          )}
+        </div>
+      </div>
       <Toaster />
     </div>
-  )
-}
+  );
+};
 
 export default SearchPage;

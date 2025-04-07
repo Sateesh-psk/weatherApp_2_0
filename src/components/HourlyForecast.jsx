@@ -60,8 +60,8 @@ const HourlyForecast = () => {
   }
 
   return (
-    <div className="mx-0 px-0 my-80 py-10">
-      {/* {console.log(forecastData)} */}
+    <div className=' h-[100vh] flex items-end justify-center'>
+    <div className=" w-full mx-0 px-0 py-10">
       <HourlyCardTab tabs={tabs} setActiveTab />
       <div className=" rounded-lg select-none scrollbar-custom grid grid-flow-col overflow-x-scroll">
         {forecastData.hour.map((obj, index) => {
@@ -81,7 +81,7 @@ const HourlyForecast = () => {
           );
           })}
       </div>
-      
+    </div>
     </div>
   )
 }
